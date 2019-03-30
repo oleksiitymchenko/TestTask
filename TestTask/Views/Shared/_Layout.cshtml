@@ -28,7 +28,7 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">TestTask</a>
             </div>
-			@if (!(bool)ViewData["IsNotLoggedIn"]) 
+			@if ((bool)ViewData["IsLoggedIn"]) 
 			{
 				 <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -49,6 +49,24 @@
         <hr />
         <footer>
             <p>&copy; 2019 - TestTask</p>
+			<!--<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+			<div class="validation" asp-validation-summary="ModelOnly"></div>
+			<div>
+			<div class="form-group">
+				<label asp-for="Email">Input Email</label>
+				<input type="text" asp-for="Email" />
+				<span asp-validation-for="Email" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Password">Input Password</label>
+				<input asp-for="Password" />
+				<span asp-validation-for="Password" />
+			</div>
+        <div class="form-group">
+            <input type="submit" value="Login" class="btn" />
+        </div>
+    </div>
+</form>-->
         </footer>
     </div>
 

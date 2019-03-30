@@ -9,12 +9,13 @@ namespace TestTask.Controllers
     {
         public HomeController()
         {
-            ViewData["IsLoggedIn"] = true;
+            
         }
 
         [Authorize]
         public IActionResult Index()
         {
+            ViewData["IsLoggedIn"] = true;
             ViewData["Title"] = "Title";
             return View();
         }
@@ -22,6 +23,7 @@ namespace TestTask.Controllers
         [Authorize]
         public IActionResult About()
         {
+            ViewData["IsLoggedIn"] = true;
             ViewData["Message"] = "Your application description page.";
 
             return View();
@@ -30,6 +32,7 @@ namespace TestTask.Controllers
         [Authorize]
         public IActionResult Contact()
         {
+            ViewData["IsLoggedIn"] = true;
             ViewData["Message"] = "Your contact page.";
 
             return View();

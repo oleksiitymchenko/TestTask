@@ -7,31 +7,34 @@ using TestTask.ViewModels;
 using TestTask.DataAccess.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System;
-using TestTask.DataAccess;
+using TestTask.Services;
 
 namespace TestTask.Controllers
 {
     public class AccountController : Controller
     {
-        private ApplicationContext db;
-        public AccountController(ApplicationContext context)
+        private AccountService service;
+
+        public AccountController(AccountService service)
         {
-            db = context;
+            this.service = service;
             ViewData["IsLoggedIn"] = false;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
+            ViewData["IsLoggedIn"] = false;
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                User user = await service.FindUserByCredentialsAsync(model);
                 if (user != null)
                 {
                     await Authenticate(model.Email); // аутентификация
@@ -43,14 +46,10 @@ namespace TestTask.Controllers
             return View(model);
         }
 
-        private Task Authenticate(object email)
-        {
-            throw new NotImplementedException();
-        }
-
         [HttpGet]
         public IActionResult Register()
         {
+            ViewData["IsLoggedIn"] = false;
             return View();
         }
         [HttpPost]
@@ -59,41 +58,36 @@ namespace TestTask.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (user == null)
-                {
-                    // добавляем пользователя в бд
-                    db.Users.Add(new User { Email = model.Email, Password = model.Password });
-                    await db.SaveChangesAsync();
+                var isNewUser = await service.FindAndAddAsync(model);
 
-                    await Authenticate(model.Email); // аутентификация
+                if (!isNewUser) ModelState.AddModelError("", "Such user exists");
 
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                    ModelState.AddModelError("", "Incorrect data");
+                await Authenticate(model.Email); 
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
-        {
-            // создаем один claim
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        }
+        
 
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+
+        private async Task Authenticate(string userName)
+        {
+    
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            };
+         
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+           
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
 }
