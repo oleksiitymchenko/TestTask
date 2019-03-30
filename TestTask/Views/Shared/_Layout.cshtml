@@ -58,33 +58,52 @@
 		}
         <footer>
             <p>&copy; 2019 - TestTask</p>
-			<p>Total likes: @ViewData["TotalLikes"]</p>
+			<div class="form-group">
+			<p id= "TotalLikesAmount">Total likes: @ViewData["TotalLikes"]</p>
 			@if ((bool)ViewData["IsLoggedIn"]) 
-			{
-			<button onclick="likeIt()" id="LikeButton">Like it</button>
+			{	
+				@if((bool)ViewData["IsLiked"])
+				{
+					<button onclick="likeIt()" id="LikeButton">Dislike it</button>
+				} else {
+					<button onclick="likeIt()" id="LikeButton">Like it</button>
+				}
 			}
+			</div>
         </footer>
     </div>
 	<script>
 	function likeIt(){
 		let element = $("#LikeButton");
 		if(element.text() == "Like it") {
-			element.text("Dislike it");
 			plusOneLike();
 		}
 		else {
-			element.text("Like it");
+			minusOneLike();
 		}
 	}
 
 	function plusOneLike(){
 	$.get(
-			"@Url.Action("LikePage", "Like")/kek",
+			"@Url.Action("LikePage", "Like")/@ViewData["Title"]",
+			function( data ) {
+			  ReloadData("Dislike it", data);
+			}
 		);
 	}
 
 	function minusOneLike(){
-	$.get( "@Url.Action("DisLikePage", "Like", "kek")" );
+	$.get(
+			"@Url.Action("DisLikePage", "Like")/@ViewData["Title"]",
+			function( data ) {
+			  ReloadData("Like it", data);
+			}
+		);
+	}
+
+	function ReloadData(text, data){
+		$("#TotalLikesAmount").text(`Total likes ${data}`);
+		$("#LikeButton").text(text);
 	}
 	</script>
     <environment include="Development">
