@@ -41,5 +41,19 @@ namespace TestTask.Services
 
             return isLiked;
         }
+
+        public async Task<int> LikePage(string PageName, string UserName, int likes)
+        {
+            await userPageRepository.CreateAsync(new UserLikedPage()
+            {
+                Pagename = PageName,
+                Username = UserName
+            });
+
+            var page = await pageRepository.GetEntityByNameAsync(PageName);
+            page.Likes += likes;
+            await pageRepository.UpdateAsync(page, page.Id);
+            return page.Likes;
+        }
     }
 }

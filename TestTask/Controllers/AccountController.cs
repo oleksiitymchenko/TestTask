@@ -22,7 +22,7 @@ namespace TestTask.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             ViewData["IsLoggedIn"] = false;
             return View();
@@ -48,7 +48,7 @@ namespace TestTask.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             ViewData["IsLoggedIn"] = false;
             return View();

@@ -19,19 +19,23 @@ namespace TestTask.Controllers
         {
             var page = await service.CreateIfNotExists("Index");
             var isLiked = await service.CheckIsLiked("Index", User.Identity.Name);
+
             ViewData["TotalLikes"] = page.Likes;
             ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
-            ViewData["Title"] = "Title";
+            ViewData["IsLiked"] = isLiked;
+            ViewData["Title"] = "Index";
             return View();
         }
 
         public async Task<IActionResult> About()
         {
             var page = await service.CreateIfNotExists("About");
+            var isLiked = await service.CheckIsLiked("About", User.Identity.Name);
 
             ViewData["TotalLikes"] = page.Likes;
-
             ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
+            ViewData["IsLiked"] = isLiked;
+            ViewData["Title"] = "About";
 
             ViewData["Message"] = "Truly new description page.";
 
@@ -41,9 +45,14 @@ namespace TestTask.Controllers
         public async Task<IActionResult> Contact()
         {
             var page = await service.CreateIfNotExists("Contact");
+            var isLiked = await service.CheckIsLiked("Contact", User.Identity.Name);
 
             ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
-            ViewData["TotalLikes"] = 10;
+            ViewData["TotalLikes"] = page.Likes;
+            ViewData["IsLiked"] = isLiked;
+            ViewData["Title"] = "Contact";
+
+
             ViewData["Message"] = "Truly new contact page.";
 
             return View();
@@ -52,14 +61,17 @@ namespace TestTask.Controllers
         public async Task<IActionResult> Privacy()
         {
             var page = await service.CreateIfNotExists("Privacy");
+            var isLiked = await service.CheckIsLiked("Privacy", User.Identity.Name);
 
             ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
             ViewData["TotalLikes"] = page.Likes;
+            ViewData["IsLiked"] = isLiked;
+            ViewData["Title"] = "Privacy";
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
