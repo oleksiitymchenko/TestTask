@@ -18,15 +18,14 @@ namespace TestTask.Services
 
         public async Task<User> FindUserByCredentialsAsync(LoginModel model)
         {
-            var entities = await repository.GetEntitiesAsync();
-            return entities.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+           return await repository.GetEntityAsync(predicate: 
+               u => u.Email == model.Email && u.Password == model.Password);
         }
 
         public async Task<bool> FindAndAddAsync(RegisterModel model)
         {
-            var entities = await repository.GetEntitiesAsync();
-            User user = entities.FirstOrDefault(u => u.Email == model.Email);
-            if(user == null)
+            var user = await repository.GetEntityAsync(u => u.Email == model.Email);
+            if (user == null)
             {
                 await repository.CreateAsync(new User { Email = model.Email, Password = model.Password });
                 return true;

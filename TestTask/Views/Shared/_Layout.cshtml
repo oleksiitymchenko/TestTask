@@ -64,47 +64,44 @@
 			{	
 				@if((bool)ViewData["IsLiked"])
 				{
-					<button onclick="likeIt()" id="LikeButton">Dislike it</button>
+					<button onclick="LikePage()" id="LikeButton">Dislike it</button>
 				} else {
-					<button onclick="likeIt()" id="LikeButton">Like it</button>
+					<button onclick="LikePage()" id="LikeButton">Like it</button>
 				}
 			}
 			</div>
         </footer>
-    </div>
+    </div
+
 	<script>
-	function likeIt(){
-		let element = $("#LikeButton");
-		if(element.text() == "Like it") {
+
+	function LikePage(){
+		if($("#LikeButton").text() == "Like it") {
 			plusOneLike();
+			return;
 		}
-		else {
-			minusOneLike();
-		}
+		minusOneLike();
 	}
 
 	function plusOneLike(){
-	$.get(
-			"@Url.Action("LikePage", "Like")/@ViewData["Title"]",
-			function( data ) {
-			  ReloadData("Dislike it", data);
-			}
-		);
+		$.get( "@Url.Action("LikePage", "Like")/@ViewData["Title"]", 
+				function( data ) {
+					ReloadData("Dislike it", data);
+				});
 	}
 
 	function minusOneLike(){
-	$.get(
-			"@Url.Action("DisLikePage", "Like")/@ViewData["Title"]",
+	$.get( "@Url.Action("DisLikePage", "Like")/@ViewData["Title"]", 
 			function( data ) {
-			  ReloadData("Like it", data);
-			}
-		);
+				ReloadData("Like it", data);
+			});
 	}
 
 	function ReloadData(text, data){
 		$("#TotalLikesAmount").text(`Total likes ${data}`);
 		$("#LikeButton").text(text);
 	}
+
 	</script>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

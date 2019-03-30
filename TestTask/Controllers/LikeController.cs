@@ -30,7 +30,6 @@ namespace TestTask.Controllers
         public async Task<IActionResult> DisLikePage(string pageName)
         {
             int likes = await service.LikePage(pageName, User.Identity.Name, -1);
-
             return Ok(likes);
         }
     }

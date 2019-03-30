@@ -21,8 +21,7 @@ namespace TestTask.Services
 
         public async Task<Page> CreateIfNotExists(string name)
         {
-            var entity = await pageRepository.GetEntitiesAsync();
-            var page = entity.FirstOrDefault(item => item.PageName == name);
+            var page = await pageRepository.GetEntityAsync(item => item.PageName == name);
 
             if (page != null) return page;
 
@@ -49,8 +48,8 @@ namespace TestTask.Services
                 Pagename = PageName,
                 Username = UserName
             });
+            var page = await pageRepository.GetEntityAsync(p => p.PageName == PageName);
 
-            var page = await pageRepository.GetEntityByNameAsync(PageName);
             page.Likes += likes;
             await pageRepository.UpdateAsync(page, page.Id);
             return page.Likes;
