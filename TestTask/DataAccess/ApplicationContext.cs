@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestTask.DataAccess.Models;
 
-namespace TestTask.Models
+namespace TestTask.DataAccess
 {
-    public class UserContext:DbContext
+    public class ApplicationContext:DbContext
     {
         public DbSet<User> Users { get; set; }
-        public UserContext(DbContextOptions<UserContext> options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
             Database.EnsureCreated();

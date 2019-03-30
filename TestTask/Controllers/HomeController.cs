@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestTask.Models;
+using TestTask.DataAccess.Models;
 
 namespace TestTask.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController()
+        {
+            ViewData["IsLoggedIn"] = true;
+        }
+
         [Authorize]
         public IActionResult Index()
         {
+            ViewData["Title"] = "Title";
             return View();
         }
 
