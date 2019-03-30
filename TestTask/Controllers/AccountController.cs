@@ -50,7 +50,7 @@ namespace TestTask.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                logger.LogWarning($"User {user.Email} didn`t logged in");
+                logger.LogWarning($"User {model.Email} didn`t logged in");
                 ModelState.AddModelError("", "Incorrect data");
             }
             return View(model);
