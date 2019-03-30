@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestTask.Models;
 
@@ -10,11 +11,13 @@ namespace TestTask.Controllers
 {
     public class HomeController : Controller
     {
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -22,6 +25,7 @@ namespace TestTask.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -29,6 +33,7 @@ namespace TestTask.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
