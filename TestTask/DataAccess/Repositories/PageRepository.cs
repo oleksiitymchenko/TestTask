@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using TestTask.DataAccess.Models;
 
 namespace TestTask.DataAccess.Repositories
 {
-    public class PageRepository
+    public class PageRepository : GenericRepository<Page>
     {
+        public PageRepository(ApplicationContext context) : base(context)
+        {
+        }
     }
 }

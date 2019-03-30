@@ -32,6 +32,7 @@ namespace TestTask.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            ViewData["IsLoggedIn"] = false;
             if (ModelState.IsValid)
             {
                 User user = await service.FindUserByCredentialsAsync(model);
@@ -56,6 +57,7 @@ namespace TestTask.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
+            ViewData["IsLoggedIn"] = true;
             if (ModelState.IsValid)
             {
                 var isNewUser = await service.FindAndAddAsync(model);

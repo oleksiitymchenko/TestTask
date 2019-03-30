@@ -1,46 +1,60 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TestTask.DataAccess.Models;
+using TestTask.Services;
 
 namespace TestTask.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
+        private PageService service;
+
+        public HomeController(PageService service)
         {
-            
+            this.service = service;
         }
 
-        [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["IsLoggedIn"] = true;
+            var page = await service.CreateIfNotExists("Index");
+            var isLiked = await service.CheckIsLiked("Index", User.Identity.Name);
+            ViewData["TotalLikes"] = page.Likes;
+            ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
             ViewData["Title"] = "Title";
             return View();
         }
 
-        [Authorize]
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            ViewData["IsLoggedIn"] = true;
-            ViewData["Message"] = "Your application description page.";
+            var page = await service.CreateIfNotExists("About");
+
+            ViewData["TotalLikes"] = page.Likes;
+
+            ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
+
+            ViewData["Message"] = "Truly new description page.";
 
             return View();
         }
 
-        [Authorize]
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
-            ViewData["IsLoggedIn"] = true;
-            ViewData["Message"] = "Your contact page.";
+            var page = await service.CreateIfNotExists("Contact");
+
+            ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
+            ViewData["TotalLikes"] = 10;
+            ViewData["Message"] = "Truly new contact page.";
 
             return View();
         }
 
-        [Authorize]
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+            var page = await service.CreateIfNotExists("Privacy");
+
+            ViewData["IsLoggedIn"] = User.Identity.IsAuthenticated;
+            ViewData["TotalLikes"] = page.Likes;
             return View();
         }
 
