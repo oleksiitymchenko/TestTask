@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,20 +27,19 @@ namespace TestTask
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
             services.AddTransient<AccountService>();
             services.AddTransient<PageService>();
-            // установка конфигурации подключения
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.LoginPath = new PathString("/Account/Login");
                 });
 
 
-            /*services.Configure<CookiePolicyOptions>(options =>
+           services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });*/
+            });
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -65,7 +60,9 @@ namespace TestTask
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseStaticFiles();
-            //app.UseCookiePolicy();
+            app.UseCookiePolicy();
+
+            app.UseStatusCodePages("text/plain", "Error. Status code : {0}");
 
             app.UseAuthentication();
             app.UseMvc(routes =>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TestTask.ViewModels;
@@ -53,6 +52,7 @@ namespace TestTask.Controllers
             ViewData["IsLoggedIn"] = false;
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -70,8 +70,6 @@ namespace TestTask.Controllers
             return View(model);
         }
 
-        
-
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
@@ -81,7 +79,6 @@ namespace TestTask.Controllers
 
         private async Task Authenticate(string userName)
         {
-    
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName)

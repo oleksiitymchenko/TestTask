@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TestTask.DataAccess;
 using TestTask.DataAccess.Models;
 using TestTask.DataAccess.Repositories;

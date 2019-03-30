@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using TestTask.DataAccess.Models;
+﻿using TestTask.DataAccess.Models;
 
 namespace TestTask.DataAccess.Repositories
 {

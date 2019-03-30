@@ -51,8 +51,6 @@ namespace TestTask.Controllers
             ViewData["TotalLikes"] = page.Likes;
             ViewData["IsLiked"] = isLiked;
             ViewData["Title"] = "Contact";
-
-
             ViewData["Message"] = "Truly new contact page.";
 
             return View();
